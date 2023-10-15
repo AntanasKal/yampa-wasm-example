@@ -2,6 +2,8 @@
 
 A (WIP) example of using Yampa and GHC Wasm backend to create a simple web game.
 
+!["Circle rotating around the mouse."](assets/rotating_circle.gif)
+
 ### Building
 
 1. Enter nix flake of GHC Wasm backed with `all_9_6` flavour: 
