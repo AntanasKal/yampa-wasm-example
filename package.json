@@ -1,0 +1,21 @@
+{
+  "name": "npm-wasm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "www/client.js",
+  "scripts": {
+    "bundle": "npx esbuild www/client.js --bundle --sourcemap  --outfile=dist/bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "http-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bjorn3/browser_wasi_shim": "^0.2.15",
+    "buffer": "^6.0.3",
+    "http-server": "^14.1.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.19.4"
+  }
+}
