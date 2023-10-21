@@ -20,12 +20,16 @@ A (WIP) example of using Yampa and GHC Wasm backend to create a simple web game.
     ```
     wasm32-wasi-cabal build
     ```
-3. Bundle JS code:
+3. Install node packages:
+    ```
+    npm install
+    ```
+4. Bundle JS code:
     ```
     npm run bundle
     ```
-4. Start a local server:
+5. Start a local server:
     ```
     npm run serve
     ```
-5. The web application should be available at http://localhost:8080/ via your browser.
+6. The web application should be available at http://localhost:8080/ via your browser.
