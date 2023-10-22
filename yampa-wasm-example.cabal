@@ -10,7 +10,7 @@ build-type:         Simple
 common warnings
     ghc-options: -Wall
 
-executable wasm-yampa-reactor
+executable game-core
     import:           warnings
     main-is:          Game.hs
     build-depends:    base >= 4.16.0.0
@@ -18,12 +18,13 @@ executable wasm-yampa-reactor
                     , bytestring
 
 
-    hs-source-dirs:   src
     default-language: Haskell2010
+    c-sources:        cbits/main.c
+    include-dirs:     cbits
+    hs-source-dirs:   src
     ghc-options:
         -Wall
         -Wunused-packages
         -no-hs-main
         -optl-mexec-model=reactor
-        "-optl-Wl,--export=hs_init,--export=runStep,--export=getOutX,--export=getOutY,--export=malloc,--export=free,--export=reverseCharArray"
-        -o dist/core-game.wasm
+        "-optl-Wl,--export=hs_init,--export=runGameStep,--export=renderGame,--export=getOutX,--export=getOutY,--export=malloc,--export=free,--export=reverseCharArray"

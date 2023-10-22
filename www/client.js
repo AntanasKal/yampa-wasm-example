@@ -1,9 +1,29 @@
 import { WASI } from "@bjorn3/browser_wasi_shim";
 import { Buffer } from 'buffer';
 
-const haskellWasmPath = "./dist/core-game.wasm"
+const haskellWasmPath = "./dist/game-core.wasm"
 
-var pressed={};
+const canvas = document.getElementById('GameCanvas');
+const context = canvas.getContext('2d');
+
+// Functions that will be called from Haskell
+const externalFunctions = {
+    renderCircle : (posX, posY, radius, colR, colG, colB) => {
+        context.beginPath();
+        context.arc(posX, posY, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = `rgb(${colR},${colG},${colB})`;
+        context.fill();
+        context.lineWidth = 5;
+        context.strokeStyle = '#003300';
+        context.stroke();
+    },
+    clearCanvas: (colR, colG, colB) => {
+        context.fillStyle=`rgb(${colR},${colG},${colB})`;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
+var pressed = {};
 var mouseX = 0;
 var mouseY = 0;
 
@@ -28,7 +48,10 @@ document.addEventListener('mousemove', (event) => {
 
 async function run() {
     const wasi = new WASI([], [], []);
-    const wasiImportObj = { wasi_snapshot_preview1: wasi.wasiImport };
+    const wasiImportObj = { 
+        wasi_snapshot_preview1: wasi.wasiImport,
+        env: externalFunctions
+    };
     const wasm = await WebAssembly.compileStreaming(fetch(haskellWasmPath));
     const inst = await WebAssembly.instantiate(wasm, wasiImportObj);
     console.log("Calling WASI init function.");
@@ -57,36 +80,11 @@ async function run() {
     inst.exports.free(inputPtr);
     inst.exports.free(outputPtr);
 
-
-
     setInterval(function() {
         // run game step
-        inst.exports.runStep(mouseX, mouseY);
-        
-        // Right now 2 output variables are received using two functions
-        // This can be replaces by reading/writing to some byte arrays
-        const outX = inst.exports.getOutX();
-        const outY = inst.exports.getOutY();
-        render(outX, outY);
+        inst.exports.runGameStep(mouseX, mouseY);
+        inst.exports.renderGame();
     }, 10);
 }
 
-function render(centerX, centerY) {
-    const canvas = document.getElementById('GameCanvas');
-    const context = canvas.getContext('2d');
-    const radius = 30;
-    context.fillStyle="rgb(30,20,100)"
-    context.fillRect(0, 0, 1000, 1000);
-
-    context.beginPath();
-    context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-    context.fillStyle = "rgb(100,200,20)";
-    context.fill();
-    context.lineWidth = 5;
-    context.strokeStyle = '#003300';
-    context.stroke();
-}
-
 run();
-
-

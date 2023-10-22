@@ -18,7 +18,7 @@ A (WIP) example of using Yampa and GHC Wasm backend to create a simple web game.
 
 2. Inside the flake (or while having GHC with Wasm backend set up by different means), build Haskell code by:
     ```
-    wasm32-wasi-cabal build
+    ./build_haskell.sh
     ```
 3. Install node packages:
     ```
