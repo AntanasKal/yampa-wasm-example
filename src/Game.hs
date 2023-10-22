@@ -12,14 +12,24 @@ import Foreign.C ( CChar )
 import Data.ByteString.Unsafe (unsafePackMallocCStringLen, unsafeUseAsCStringLen)
 import Data.ByteString as BS ( reverse )
 
+-- imported functions from JS
 foreign import ccall "renderCircle" renderCircle :: Double -> Double -> Double -> Int -> Int -> Int -> IO ()
 foreign import ccall "clearCanvas" clearCanvas :: Int -> Int -> Int -> IO ()
+
 -- TODO: review this
 -- Using "the unsafePerformIO hack"
 -- cf https://wiki.haskell.org/Top_level_mutable_state
-gameReactHandle :: ReactHandle (Int,Int) GameOutput
+gameReactHandle :: ReactHandle GameInput GameOutput
 {-# NOINLINE gameReactHandle #-}
 gameReactHandle = unsafePerformIO $ reactInit initialInput actuate signalFunction
+
+data GameInput = GameInput {
+  mouseX :: Double,
+  mouseY :: Double
+}
+
+defaultGameInput :: GameInput
+defaultGameInput = GameInput 0 0
 
 data GameOutput = GameOutput {
   circleX :: Double,
@@ -29,42 +39,42 @@ data GameOutput = GameOutput {
 defaultGameOutput :: GameOutput
 defaultGameOutput = GameOutput 0 0
 
-signalFunction :: SF (Int, Int) GameOutput
-signalFunction = proc (mouseX, mouseY) -> do
+signalFunction :: SF GameInput GameOutput
+signalFunction = proc gi -> do
   t <- time -< ()
-  let x = fromIntegral mouseX + (Math.cos (4 * t) * 50) 
-  let y = fromIntegral mouseY + (Math.sin (4 * t) * 50) 
+  let x = mouseX gi + (Math.cos (4 * t) * 50) 
+  let y = mouseY gi + (Math.sin (4 * t) * 50) 
   returnA -< GameOutput x y
 
 
-initialInput :: IO (Int, Int)
-initialInput = return (0, 0)
+initialInput :: IO GameInput
+initialInput = return defaultGameInput
 
-actuate ::  (ReactHandle (Int, Int) GameOutput -> Bool -> GameOutput -> IO Bool)
+actuate ::  (ReactHandle GameInput GameOutput -> Bool -> GameOutput -> IO Bool)
 actuate _ _ out = do
   writeIORef gameOutput out
   return False
 
--- Exported function to perform single game step
-foreign export ccall runGameStep :: Int -> Int -> IO ()
-runGameStep :: Int -> Int -> IO ()
+-- Exported function to perform single game step, function is called from JS
+foreign export ccall runGameStep :: Double -> Double -> IO ()
+runGameStep :: Double -> Double -> IO ()
 runGameStep x y = do
-  _ <- react gameReactHandle (0.01, Just (x, y))
+  _ <- react gameReactHandle (0.01, Just (GameInput x y))
   return ()
 
--- Exported function to render the game
+-- Exported function to render the game, function is called from JS
 foreign export ccall renderGame :: IO ()
 renderGame :: IO ()
 renderGame = do
   out <- readIORef gameOutput
   clearCanvas 30 30 180
-  renderCircle (circleX out) (circleY out) (20) (70) (200) (150)
+  renderCircle (circleX out) (circleY out) 20 70 200 150
   return ()
 
 
 -- Game output is written to IORef variable.
 -- And a couple of functions to read the output values from Javascript.
--- This way of producing output can be change to passing some byte array
+-- This way of producing output can be changed to passing some byte array
 gameOutput :: IORef GameOutput
 {-# NOINLINE gameOutput #-}
 gameOutput = unsafePerformIO $ newIORef defaultGameOutput
