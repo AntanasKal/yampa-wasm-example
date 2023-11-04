@@ -13,9 +13,9 @@ const externalFunctions = {
         context.arc(posX, posY, radius, 0, 2 * Math.PI, false);
         context.fillStyle = `rgb(${colR},${colG},${colB})`;
         context.fill();
-        context.lineWidth = 5;
-        context.strokeStyle = '#003300';
-        context.stroke();
+        // context.lineWidth = 5;
+        // context.strokeStyle = '#003300';
+        // context.stroke();
     },
     clearCanvas: (colR, colG, colB) => {
         context.fillStyle=`rgb(${colR},${colG},${colB})`;
@@ -42,8 +42,9 @@ document.addEventListener('keyup', (event) => {
 
 // Add event listener on mouse position
 document.addEventListener('mousemove', (event) => {
-    mouseX = event.clientX;
-    mouseY = event.clientY;
+    var rect = canvas.getBoundingClientRect();
+    mouseX = event.clientX - rect.left;
+    mouseY = event.clientY - rect.top;
 })
 
 async function run() {

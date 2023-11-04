@@ -13,6 +13,7 @@ common warnings
 executable game-core
     import:           warnings
     main-is:          Game.hs
+    other-modules:    Imports
     build-depends:    base >= 4.16.0.0
                     , Yampa >= 0.14.5
                     , bytestring

@@ -2,6 +2,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Game where
 
+import Imports
 import FRP.Yampa
 import Foreign.Ptr ( Ptr )
 import Foreign ( mallocBytes, copyBytes )
@@ -11,10 +12,6 @@ import qualified GHC.Float as Math
 import Foreign.C ( CChar )
 import Data.ByteString.Unsafe (unsafePackMallocCStringLen, unsafeUseAsCStringLen)
 import Data.ByteString as BS ( reverse )
-
--- imported functions from JS
-foreign import ccall "renderCircle" renderCircle :: Double -> Double -> Double -> Int -> Int -> Int -> IO ()
-foreign import ccall "clearCanvas" clearCanvas :: Int -> Int -> Int -> IO ()
 
 -- TODO: review this
 -- Using "the unsafePerformIO hack"
@@ -63,6 +60,7 @@ runGameStep x y = do
   return ()
 
 -- Exported function to render the game, function is called from JS
+-- This function calls JS functions for rendering
 foreign export ccall renderGame :: IO ()
 renderGame :: IO ()
 renderGame = do
