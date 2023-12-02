@@ -13,9 +13,6 @@ const externalFunctions = {
         context.arc(posX, posY, radius, 0, 2 * Math.PI, false);
         context.fillStyle = `rgb(${colR},${colG},${colB})`;
         context.fill();
-        // context.lineWidth = 5;
-        // context.strokeStyle = '#003300';
-        // context.stroke();
     },
     clearCanvas: (colR, colG, colB) => {
         context.fillStyle=`rgb(${colR},${colG},${colB})`;
@@ -82,9 +79,8 @@ async function run() {
     inst.exports.free(outputPtr);
 
     setInterval(function() {
-        // run game step
+        // run game step and render
         inst.exports.runGameStep(mouseX, mouseY);
-        inst.exports.renderGame();
     }, 10);
 }
 

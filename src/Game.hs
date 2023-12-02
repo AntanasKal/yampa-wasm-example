@@ -47,9 +47,10 @@ signalFunction = proc gi -> do
 initialInput :: IO GameInput
 initialInput = return defaultGameInput
 
-actuate ::  (ReactHandle GameInput GameOutput -> Bool -> GameOutput -> IO Bool)
+actuate :: ReactHandle GameInput GameOutput -> Bool -> GameOutput -> IO Bool
 actuate _ _ out = do
   writeIORef gameOutput out
+  renderGame out
   return False
 
 -- Exported function to perform single game step, function is called from JS
@@ -59,16 +60,12 @@ runGameStep x y = do
   _ <- react gameReactHandle (0.01, Just (GameInput x y))
   return ()
 
--- Exported function to render the game, function is called from JS
--- This function calls JS functions for rendering
-foreign export ccall renderGame :: IO ()
-renderGame :: IO ()
-renderGame = do
-  out <- readIORef gameOutput
+
+renderGame :: GameOutput -> IO ()
+renderGame out = do
   clearCanvas 30 30 180
   renderCircle (circleX out) (circleY out) 20 70 200 150
   return ()
-
 
 -- Game output is written to IORef variable.
 -- And a couple of functions to read the output values from Javascript.

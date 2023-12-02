@@ -28,4 +28,4 @@ executable game-core
         -Wunused-packages
         -no-hs-main
         -optl-mexec-model=reactor
-        "-optl-Wl,--export=hs_init,--export=runGameStep,--export=renderGame,--export=getOutX,--export=getOutY,--export=malloc,--export=free,--export=reverseCharArray"
+        "-optl-Wl,--export=hs_init,--export=runGameStep,--export=getOutX,--export=getOutY,--export=malloc,--export=free,--export=reverseCharArray"
