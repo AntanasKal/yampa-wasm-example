@@ -6,6 +6,11 @@ const haskellWasmPath = "./dist/game-core.wasm"
 const canvas = document.getElementById('GameCanvas');
 const context = canvas.getContext('2d');
 
+// TODO: check if they need to be global
+var memory = null;
+var encoder = null;
+var decoder = null;
+
 // Functions that will be called from Haskell
 const externalFunctions = {
     renderCircle : (posX, posY, radius, colR, colG, colB) => {
@@ -14,9 +19,29 @@ const externalFunctions = {
         context.fillStyle = `rgb(${colR},${colG},${colB})`;
         context.fill();
     },
-    clearCanvas: (colR, colG, colB) => {
+    clearCanvas : (colR, colG, colB) => {
         context.fillStyle=`rgb(${colR},${colG},${colB})`;
         context.fillRect(0, 0, canvas.width, canvas.height);
+    },
+    fillStyle : (colR, colG, colB) => {
+        context.fillStyle=`rgb(${colR},${colG},${colB})`;
+    },
+    fillRect : (x, y, width, height) => {
+        context.fillRect(x, y, width, height);
+    },
+    getCanvasWidth : () => {
+        return canvas.width;
+    },
+    getCanvasHeight : () => {
+        return canvas.height;
+    },
+    fillText : (textPtr, textLen, x, y, maxWidth) => {
+        console.log(textLen);
+        console.log(textPtr);
+        context.font = "50px serif";
+        const textArr = new Uint8Array(memory.buffer, textPtr, textLen);
+        const text = decoder.decode(textArr);
+        context.fillText(text, x, y, maxWidth);
     }
 }
 
@@ -57,9 +82,9 @@ async function run() {
     inst.exports.hs_init(0, 0);
     console.log("Initialized WASI reactor.");
 
-    const memory = inst.exports.memory;
-    const encoder = new TextEncoder();
-    const decoder = new TextDecoder();
+    memory = inst.exports.memory;
+    encoder = new TextEncoder();
+    decoder = new TextDecoder();
 
     // Just an example of sending and receving
     // byte arrays to and from a WASI reactor

@@ -65,6 +65,7 @@ renderGame :: GameOutput -> IO ()
 renderGame out = do
   clearCanvas 30 30 180
   renderCircle (circleX out) (circleY out) 20 70 200 150
+  fillTextHelper "Hello" 90 150 80
   return ()
 
 -- Game output is written to IORef variable.
