@@ -1,12 +1,20 @@
-## Yampa Wasm Example
+# Yampa Wasm Example
 
 A (WIP) example of using Yampa and GHC Wasm backend to create a simple web game.
 
 !["Circle rotating around the mouse."](assets/rotating_circle.gif)
 
+## Instructions
+
 ### Building
 
-1. Enter nix flake of GHC Wasm backed with `all_9_6` flavour: 
+1. Clone and enter the repo
+    ```
+    git clone https://github.com/AntanasKal/yampa-wasm-example
+    cd yampa-wasm-example
+    ```
+
+2. Enter nix flake of GHC Wasm backend with `all_9_6` flavour: 
     ```
     nix shell https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/archive/master/ghc-wasm-meta-master.tar.gz#all_9_6
     ```
@@ -16,20 +24,23 @@ A (WIP) example of using Yampa and GHC Wasm backend to create a simple web game.
     ```
     If you want to setup GHC with Wasm backend without nix, follow [ghc-wasm-meta](https://gitlab.haskell.org/ghc/ghc-wasm-meta#getting-started-without-nix) guide (make sure to set the flavour to be `9.6`).
 
-2. Inside the flake (or while having GHC with Wasm backend set up by different means), build Haskell code by:
+3. Inside the flake (or while having GHC with Wasm backend set up by different means), run:
     ```
-    ./build_haskell.sh
+    make serve
     ```
-3. Install node packages:
+    This command will build Haskell code, bundle JS code and serve the application.
+    
+4. The web application should be available at http://localhost:8080/ via your browser.
+
+### Using Docker to build and deploy
+
+1. Clone the repo:
     ```
-    npm install
+    git clone https://github.com/AntanasKal/yampa-wasm-example
     ```
-4. Bundle JS code:
+2. Run this command:
     ```
-    npm run bundle
+    docker run -p 8080:8080 -v $PWD/yampa-wasm-example/:/root/yampa-wasm-example/ -it nixos/nix bash -c "cd /root/yampa-wasm-example/ && nix shell --extra-experimental-features flakes --extra-experimental-features nix-command "https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/archive/master/ghc-wasm-meta-master.tar.gz#all_9_6" -c make serve"
     ```
-5. Start a local server:
-    ```
-    npm run serve
-    ```
-6. The web application should be available at http://localhost:8080/ via your browser.
+    Instead of `nixos/nix` image, one can use a different image based on Dockerfile provided in this repo [here](./tools/Dockerfile). This image is built on top of base Ubuntu.
+3. The web application should be available at http://localhost:8080/ via your browser.
