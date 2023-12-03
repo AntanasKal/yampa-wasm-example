@@ -1,6 +1,6 @@
 # Yampa Wasm Example
 
-A (WIP) example of using Yampa and GHC Wasm backend to create a simple web game.
+A an example of using Yampa and GHC Wasm backend to create a simple web app. The app is deployed to GitHub Pages and can be found [here](https://antanaskal.github.io/yampa-wasm-example/).
 
 !["Circle rotating around the mouse."](assets/rotating_circle.gif)
 
