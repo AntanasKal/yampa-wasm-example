@@ -2,7 +2,6 @@
   "name": "npm-wasm",
   "version": "1.0.0",
   "description": "",
-  "main": "www/client.js",
   "scripts": {
     "bundle": "npx esbuild www/client.js --bundle --sourcemap  --outfile=dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1",
