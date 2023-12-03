@@ -42,5 +42,5 @@ A an example of using Yampa and GHC Wasm backend to create a simple web app. The
     ```
     docker run -p 8080:8080 -v $PWD/yampa-wasm-example/:/root/yampa-wasm-example/ -it nixos/nix bash -c "cd /root/yampa-wasm-example/ && nix shell --extra-experimental-features flakes --extra-experimental-features nix-command "https://gitlab.haskell.org/ghc/ghc-wasm-meta/-/archive/master/ghc-wasm-meta-master.tar.gz#all_9_6" -c make serve"
     ```
-    Instead of `nixos/nix` image, one can use a different image based on Dockerfile provided in this repo [here](./tools/Dockerfile). This image is built on top of base Ubuntu.
+    Instead of `nixos/nix` image, one can use a different image based on Dockerfile provided in this repo [here](./tools/ubuntu_based_docker/Dockerfile). This image is built on top of base Ubuntu. And there is also another image [here](./tools/nix_based_docker/Dockerfile) which is built on top of `nixos/nix` image and has GHC Wasm backend preinstalled.
 3. The web application should be available at http://localhost:8080/ via your browser.
