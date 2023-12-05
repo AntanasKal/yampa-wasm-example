@@ -6,12 +6,22 @@ const haskellWasmPath = "./dist/game-core.wasm"
 const canvas = document.getElementById('GameCanvas');
 const context = canvas.getContext('2d');
 
-// TODO: check if they need to be global
+// TODO: figure out how to make 'memory' variable const
+// Right now this variable is initialised when initialising WASM module
 var memory = null;
-var encoder = null;
-var decoder = null;
+// Ideally it would be initialised something like this:
+// const memory = new WebAssembly.Memory({
+//     initial: 256,
+//     maximum: 4096,
+//     shared: true,
+//   });
+// but then I get errors about using shared buffers with TextDecoder and TextEncoder
+// Some answer is here:
+// https://stackoverflow.com/a/76916494
+
 
 // Functions that will be called from Haskell
+// Essentially a small subset of wrapped Canvas functions and Canvas routines
 const externalFunctions = {
     renderCircle : (posX, posY, radius, colR, colG, colB) => {
         context.beginPath();
@@ -35,10 +45,17 @@ const externalFunctions = {
     getCanvasHeight : () => {
         return canvas.height;
     },
+    setFont : (textPtr, textLen) => {
+        const decoder = new TextDecoder();
+        const textArr = new Uint8Array(memory.buffer, textPtr, textLen);
+        const text = decoder.decode(textArr);
+        console.log(text);
+        context.font = text;
+    },
     fillText : (textPtr, textLen, x, y, maxWidth) => {
+        const decoder = new TextDecoder();
         console.log(textLen);
         console.log(textPtr);
-        context.font = "50px serif";
         const textArr = new Uint8Array(memory.buffer, textPtr, textLen);
         const text = decoder.decode(textArr);
         context.fillText(text, x, y, maxWidth);
@@ -83,8 +100,8 @@ async function run() {
     console.log("Initialized WASI reactor.");
 
     memory = inst.exports.memory;
-    encoder = new TextEncoder();
-    decoder = new TextDecoder();
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
 
     // Just an example of sending and receving
     // byte arrays to and from a WASI reactor

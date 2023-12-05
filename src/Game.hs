@@ -21,27 +21,29 @@ gameReactHandle :: ReactHandle GameInput GameOutput
 gameReactHandle = unsafePerformIO $ reactInit initialInput actuate signalFunction
 
 data GameInput = GameInput {
-  mouseX :: Double,
-  mouseY :: Double
+    mouseX :: Double
+  , mouseY :: Double
 }
 
 defaultGameInput :: GameInput
 defaultGameInput = GameInput 0 0
 
 data GameOutput = GameOutput {
-  circleX :: Double,
-  circleY :: Double
+    mousePositionX :: Double
+  , mousePositionY :: Double
+  , circleX :: Double
+  , circleY :: Double
 }
 
 defaultGameOutput :: GameOutput
-defaultGameOutput = GameOutput 0 0
+defaultGameOutput = GameOutput 0 0 0 0
 
 signalFunction :: SF GameInput GameOutput
 signalFunction = proc gi -> do
   t <- time -< ()
   let x = mouseX gi + (Math.cos (4 * t) * 50) 
   let y = mouseY gi + (Math.sin (4 * t) * 50) 
-  returnA -< GameOutput x y
+  returnA -< GameOutput (mouseX gi) (mouseY gi) x y
 
 
 initialInput :: IO GameInput
@@ -65,7 +67,12 @@ renderGame :: GameOutput -> IO ()
 renderGame out = do
   clearCanvas 30 30 180
   renderCircle (circleX out) (circleY out) 20 70 200 150
+  setFontHelper "40px serif"
+  
   fillTextHelper "Hello" 90 150 80
+  setFontHelper "20px serif"
+  fillTextHelper ("Mouse position x: "++show ((floor $ mousePositionX out) :: Integer)) 90 200 300
+  fillTextHelper ("Mouse position y: "++show ((floor $ mousePositionY out) :: Integer)) 90 250 300
   return ()
 
 -- Game output is written to IORef variable.

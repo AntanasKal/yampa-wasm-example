@@ -26,3 +26,12 @@ void _fillText(char*, int, int, int, int) __attribute__((
 void fillText(char* textPtr, int textLen, int x, int y, int maxWidth) {
   _fillText(textPtr, textLen, x, y, maxWidth);
 }
+
+void _setFont(char*, int) __attribute__((
+  __import_module__("env"),
+  __import_name__("setFont")
+));
+
+void setFont(char* textPtr, int textLen) {
+  _setFont(textPtr, textLen);
+}

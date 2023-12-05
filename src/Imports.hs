@@ -9,9 +9,16 @@ import Foreign (free)
 foreign import ccall "renderCircle" renderCircle :: Double -> Double -> Double -> Int -> Int -> Int -> IO ()
 foreign import ccall "clearCanvas" clearCanvas :: Int -> Int -> Int -> IO ()
 foreign import ccall "fillText" fillText :: Ptr CChar -> Int -> Int -> Int -> Int -> IO ()
+foreign import ccall "setFont" setFont :: Ptr CChar -> Int -> IO ()
 
 fillTextHelper :: String -> Int -> Int -> Int -> IO ()
 fillTextHelper textStr x y maxWidth = do
     (buf, len) <- newCStringLen textStr
     fillText buf len x y maxWidth
+    free buf
+
+setFontHelper :: String -> IO ()
+setFontHelper textStr = do
+    (buf, len) <- newCStringLen textStr
+    setFont buf len
     free buf
