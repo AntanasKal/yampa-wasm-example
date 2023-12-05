@@ -8,9 +8,14 @@ import Foreign (free)
 
 foreign import ccall "renderCircle" renderCircle :: Double -> Double -> Double -> Int -> Int -> Int -> IO ()
 foreign import ccall "clearCanvas" clearCanvas :: Int -> Int -> Int -> IO ()
+foreign import ccall "fillStyle" fillStyle :: Int -> Int -> Int -> IO ()
+foreign import ccall "fillRect" fillRect :: Int -> Int -> Int -> Int -> IO ()
+foreign import ccall "getCanvasWidth" getCanvasWidth :: IO Int
+foreign import ccall "getCanvasHeight" getCanvasHeight :: IO Int
 foreign import ccall "fillText" fillText :: Ptr CChar -> Int -> Int -> Int -> Int -> IO ()
 foreign import ccall "setFont" setFont :: Ptr CChar -> Int -> IO ()
 
+-- Helper function to avoid dealing with manual memory management
 fillTextHelper :: String -> Int -> Int -> Int -> IO ()
 fillTextHelper textStr x y maxWidth = do
     (buf, len) <- newCStringLen textStr

@@ -28,6 +28,7 @@ data GameInput = GameInput {
 defaultGameInput :: GameInput
 defaultGameInput = GameInput 0 0
 
+-- positions of roatating circle and mouse to the output
 data GameOutput = GameOutput {
     mousePositionX :: Double
   , mousePositionY :: Double
@@ -65,14 +66,13 @@ runGameStep x y = do
 
 renderGame :: GameOutput -> IO ()
 renderGame out = do
-  clearCanvas 30 30 180
+  clearCanvas 30 30 120
   renderCircle (circleX out) (circleY out) 20 70 200 150
-  setFontHelper "40px serif"
-  
-  fillTextHelper "Hello" 90 150 80
   setFontHelper "20px serif"
-  fillTextHelper ("Mouse position x: "++show ((floor $ mousePositionX out) :: Integer)) 90 200 300
-  fillTextHelper ("Mouse position y: "++show ((floor $ mousePositionY out) :: Integer)) 90 250 300
+  fillStyle 180 230 200
+  canvas_height <- getCanvasHeight
+  fillTextHelper ("Mouse position x: "++show ((floor $ mousePositionX out) :: Integer)) 20 (canvas_height - 50) 300
+  fillTextHelper ("Mouse position y: "++show ((floor $ mousePositionY out) :: Integer)) 20 (canvas_height - 20) 300
   return ()
 
 -- Game output is written to IORef variable.
@@ -107,6 +107,7 @@ reverseCharArray inputPtr inputLen = do
     copyBytes outputPtr buf len
     return outputPtr
 
+-- Not used, but needed to compile
 main :: IO ()
 main = do
   return ()
