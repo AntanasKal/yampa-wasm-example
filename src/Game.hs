@@ -57,10 +57,10 @@ actuate _ _ out = do
   return False
 
 -- Exported function to perform single game step, function is called from JS
-foreign export ccall runGameStep :: Double -> Double -> IO ()
-runGameStep :: Double -> Double -> IO ()
-runGameStep x y = do
-  _ <- react gameReactHandle (0.01, Just (GameInput x y))
+foreign export ccall runGameStep :: Double -> Double -> Double -> IO ()
+runGameStep :: Double -> Double -> Double -> IO ()
+runGameStep x y deltaTime = do
+  _ <- react gameReactHandle (deltaTime, Just (GameInput x y))
   return ()
 
 

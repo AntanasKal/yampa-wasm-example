@@ -49,13 +49,10 @@ const externalFunctions = {
         const decoder = new TextDecoder();
         const textArr = new Uint8Array(memory.buffer, textPtr, textLen);
         const text = decoder.decode(textArr);
-        console.log(text);
         context.font = text;
     },
     fillText : (textPtr, textLen, x, y, maxWidth) => {
         const decoder = new TextDecoder();
-        console.log(textLen);
-        console.log(textPtr);
         const textArr = new Uint8Array(memory.buffer, textPtr, textLen);
         const text = decoder.decode(textArr);
         context.fillText(text, x, y, maxWidth);
@@ -67,6 +64,7 @@ var mouseX = 0;
 var mouseY = 0;
 
 // Add event listeners on keys
+// TODO: add functions to send key statuses to Haskell
 document.addEventListener('keydown', (event) => {
     var name = event.key;
     var code = event.code;
@@ -120,10 +118,17 @@ async function run() {
     inst.exports.free(inputPtr);
     inst.exports.free(outputPtr);
 
-    setInterval(function() {
-        // run game step and render
-        inst.exports.runGameStep(mouseX, mouseY);
-    }, 10);
+    var previousTimeStamp = null;
+    function step(timeStamp) {
+        if (!previousTimeStamp) {
+            previousTimeStamp = timeStamp;
+        }
+        const deltaTime = (timeStamp-previousTimeStamp)/1000;
+        inst.exports.runGameStep(mouseX, mouseY, deltaTime);
+        previousTimeStamp = timeStamp;
+        window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
 }
 
 run();
