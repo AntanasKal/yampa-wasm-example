@@ -72,3 +72,61 @@ void _setFont(char*, int) __attribute__((
 void setFont(char* textPtr, int textLen) {
   _setFont(textPtr, textLen);
 }
+
+
+void _arc(double, double, double, double, double, bool) __attribute__((
+  __import_module__("env"),
+  __import_name__("arc")
+));
+void arc(double x, double y, double radius, double startAngle, double endAngle, bool counterclockwise) {
+  _arc(x, y, radius, startAngle, endAngle, counterclockwise);
+}
+void _ellipse(double, double, double, double, double, double, double, bool) __attribute__((
+  __import_module__("env"),
+  __import_name__("ellipse")
+));
+void ellipse(double x, double y, double radiusX, double radiusY, double rotation, double startAngle, double endAngle, bool counterclockwise) {
+  _ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise);
+}
+void _fill() __attribute__((
+  __import_module__("env"),
+  __import_name__("fill")
+));
+void fill() {
+  _fill();
+}
+void _beginPath() __attribute__((
+  __import_module__("env"),
+  __import_name__("beginPath")
+));
+void beginPath() {
+  _beginPath();
+}
+void _closePath() __attribute__((
+  __import_module__("env"),
+  __import_name__("closePath")
+));
+void closePath() {
+  _closePath();
+}
+void _stroke() __attribute__((
+  __import_module__("env"),
+  __import_name__("stroke")
+));
+void stroke() {
+  _stroke();
+}
+void _moveTo(double, double) __attribute__((
+  __import_module__("env"),
+  __import_name__("moveTo")
+));
+void moveTo(double x, double y) {
+  _moveTo(x, y);
+}
+void _lineTo(double, double) __attribute__((
+  __import_module__("env"),
+  __import_name__("lineTo")
+));
+void lineTo(double x, double y) {
+  _lineTo(x, y);
+}

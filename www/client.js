@@ -29,6 +29,30 @@ const externalFunctions = {
         context.fillStyle = `rgb(${colR},${colG},${colB})`;
         context.fill();
     },
+    arc : (x, y, radius, startAngle, endAngle, counterclockwise) => {
+        context.arc(x, y, radius, startAngle, endAngle, counterclockwise);
+    },
+    ellipse : (x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise) => {
+        context.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise);
+    },
+    fill : () => {
+        context.fill();
+    },
+    beginPath : () => {
+        context.beginPath();
+    },
+    closePath : () => {
+        context.closePath();
+    },
+    stroke : () => {
+        context.stroke();
+    },
+    moveTo : (x, y) => {
+        context.moveTo(x, y);
+    },
+    lineTo : (x, y) => {
+        context.lineTo(x, y);
+    },
     clearCanvas : (colR, colG, colB) => {
         context.fillStyle=`rgb(${colR},${colG},${colB})`;
         context.fillRect(0, 0, canvas.width, canvas.height);
