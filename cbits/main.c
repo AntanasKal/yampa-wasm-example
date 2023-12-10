@@ -28,12 +28,12 @@ void fillStyle(int colR, int colG, int colB) {
   _fillStyle(colR, colG, colB);
 }
 
-void _fillRect(int, int, int, int) __attribute__((
+void _fillRect(double, double, double, double) __attribute__((
   __import_module__("env"),
   __import_name__("fillRect")
 ));
 
-void fillRect(int x, int y, int w, int h) {
+void fillRect(double x, double y, double w, double h) {
   _fillRect(x, y, w, h);
 }
 
@@ -60,7 +60,7 @@ void _fillText(char*, int, int, int, int) __attribute__((
   __import_name__("fillText")
 ));
 
-void fillText(char* textPtr, int textLen, int x, int y, int maxWidth) {
+void fillText(char* textPtr, int textLen, double x, double y, double maxWidth) {
   _fillText(textPtr, textLen, x, y, maxWidth);
 }
 

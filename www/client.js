@@ -23,12 +23,6 @@ var memory = null;
 // Functions that will be called from Haskell
 // Essentially a small subset of wrapped Canvas functions and Canvas routines
 const externalFunctions = {
-    renderCircle : (posX, posY, radius, colR, colG, colB) => {
-        context.beginPath();
-        context.arc(posX, posY, radius, 0, 2 * Math.PI, false);
-        context.fillStyle = `rgb(${colR},${colG},${colB})`;
-        context.fill();
-    },
     arc : (x, y, radius, startAngle, endAngle, counterclockwise) => {
         context.arc(x, y, radius, startAngle, endAngle, counterclockwise);
     },

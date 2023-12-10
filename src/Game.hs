@@ -71,8 +71,8 @@ renderGame out = do
   setFontHelper "20px serif"
   fillStyle 180 230 200
   canvas_height <- getCanvasHeight
-  fillTextHelper ("Mouse position x: "++show ((floor $ mousePositionX out) :: Integer)) 20 (canvas_height - 50) 300
-  fillTextHelper ("Mouse position y: "++show ((floor $ mousePositionY out) :: Integer)) 20 (canvas_height - 20) 300
+  fillTextHelper ("Mouse position x: "++show ((floor $ mousePositionX out) :: Integer)) 20 (fromIntegral $ canvas_height - 50) 300
+  fillTextHelper ("Mouse position y: "++show ((floor $ mousePositionY out) :: Integer)) 20 (fromIntegral $ canvas_height - 20) 300
   return ()
 
 -- Game output is written to IORef variable.
