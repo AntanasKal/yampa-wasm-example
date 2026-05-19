@@ -40,7 +40,7 @@ jobs:
           rsync -Rr . _site/
         # Copying the whole repo as an artefact (is not necessary)
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
 
   # Deployment job
   deploy:
@@ -52,4 +52,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
